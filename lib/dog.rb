@@ -50,18 +50,28 @@ class Dog
   end
 
   def self.find_or_create_by(name:, breed:)
-    # binding.pry
     sql = "SELECT * FROM dogs WHERE name = ? AND breed = ?"
     result = DB[:conn].execute(sql, name, breed)[0]
-    if result[0]
+    if result != nil
       self.find_by_id(result[0])
     else
       self.create(name: name, breed: breed)
     end
   end
 
-  def update
+  def self.new_from_db(dog)
+    Dog.new(id: dog[0], name: dog[1], breed: dog[2])
+  end
 
+  def self.find_by_name(name)
+    sql = "SELECT * FROM dogs WHERE name = ?"
+    result = DB[:conn].execute(sql, name)[0]
+    Dog.new(id: result[0], name: result[1], breed: result[2])
+  end
+
+  def update
+    sql = "UPDATE dogs SET name = ?, breed = ? WHERE id = ?"
+    DB[:conn].execute(sql, self.name, self.breed, self.id)
   end
 
 end
