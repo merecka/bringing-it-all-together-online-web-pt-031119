@@ -54,7 +54,7 @@ class Dog
     sql = "SELECT * FROM dogs WHERE name = ? AND breed = ?"
     result = DB[:conn].execute(sql, name, breed)[0]
     binding.pry
-    if result[0] != nil
+    if result != nil
       self.find_by_id(result[0])
     else
       self.create(name: name, breed: breed)
