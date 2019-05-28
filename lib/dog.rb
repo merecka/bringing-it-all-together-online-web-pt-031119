@@ -49,6 +49,17 @@ class Dog
     Dog.new(id: result[0], name: result[1], breed: result[2])
   end
 
+  def self.find_or_create_by(name:, breed:)
+    # binding.pry
+    sql = "SELECT * FROM dogs WHERE name = ? AND breed = ?"
+    result = DB[:conn].execute(sql, name, breed)[0]
+    if result[0]
+      self.find_by_id(result[0])
+    else
+      self.create(name: name, breed: breed)
+    end
+  end
+
   def update
 
   end
