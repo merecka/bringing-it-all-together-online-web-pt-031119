@@ -53,6 +53,7 @@ class Dog
     # binding.pry
     sql = "SELECT * FROM dogs WHERE name = ? AND breed = ?"
     result = DB[:conn].execute(sql, name, breed)[0]
+    binding.pry
     if result[0]
       self.find_by_id(result[0])
     else
