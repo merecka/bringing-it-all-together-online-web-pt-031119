@@ -25,16 +25,28 @@ class Dog
 
   def save
     if self.id
-      self.update
+      self
     else
       sql = <<-SQL
-      INSERT INTO songs (name, album)
+      INSERT INTO dogs (name, breed)
       VALUES (?, ?)
       SQL
 
-      DB[:conn].execute(sql, self.name, self.album)
-      @id = DB[:conn].execute("SELECT last_insert_rowid() FROM songs")[0][0]
+      DB[:conn].execute(sql, self.name, self.breed)
+      @id = DB[:conn].execute("SELECT last_insert_rowid() FROM dogs")[0][0]
     end
+    self
+  end
+
+  def self.create(name:, breed:)
+    dog = Dog.new(name: name, breed: breed)
+    dog.save
+  end
+
+  def self.find_by_id(id)
+    sql = "SELECT * FROM dogs WHERE id = ?"
+    result = DB[:conn].execute(sql, id)[0]
+    Dog.new(id: result[0], name: result[1], breed: result[2])
   end
 
   def update
